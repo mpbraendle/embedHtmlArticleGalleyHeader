@@ -3,8 +3,8 @@
 /**
  * @file plugins/generic/embedHtmlArticleGalleyHeader/EmbedHtmlArticleGalleyHeaderPlugin.inc.php
  *
- * Copyright (c) 2014-2019 Simon Fraser University
- * Copyright (c) 2003-2019 John Willinsky
+ * Copyright (c) 2014-2022 Simon Fraser University
+ * Copyright (c) 2003-2022 John Willinsky
  * Distributed under the GNU GPL v2. For full terms see the file docs/COPYING.
  *
  * @class EmbedHtmlArticleGalleyHeaderPlugin
@@ -56,9 +56,21 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 		$galley =& $args[2];
 		$article =& $args[3];
 
-		if ($galley && $galley->getFileType() == 'text/html') {
+		if (!$galley) {
+			return false;
+		}
+
+		$submissionFile = $galley->getFile();
+		if ($submissionFile->getData('mimetype') === 'text/html') {
 			$fileId = $galley->getFileId();
 			if (!HookRegistry::call('HtmlArticleGalleyPlugin::articleDownload', array($article,  &$galley, &$fileId))) {
+				foreach ($article->getData('publications') as $publication) {
+					if ($publication->getId() === $galley->getData('publicationId')) {
+						$galleyPublication = $publication;
+						break;
+					}
+				}
+					
 				$templateMgr = TemplateManager::getManager($request);
 				$html = $this->_getHTMLContents($request, $galley);
 				$doc = new DOMDocument();
@@ -99,7 +111,7 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 				        				$templateMgr->addHeader('embedJs'. $count .'', '<script type="text/javascript" src="' . $script->getAttribute("src") . '"></script>');
 				        				$count++;
 								}
-							}
+				    			}
 						}
 					}
 
@@ -113,7 +125,10 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 					'issue' => $issue,
 					'article' => $article,
 					'galley' => $galley,
+					'isLatestPublication' => $article->getData('currentPublicationId') === $galley->getData('publicationId'),
+					'galleyPublication' => $galleyPublication,
 					'html' => $body,
+					'isFullWidth' => true,
 					'headerTemplatePath' => $this->getTemplateResource('header.tpl'),
 					'breadcrumbsTemplatePath' => $this->getTemplateResource('breadcrumbs_galley.tpl'),
 					'footerTemplatePath' => $this->getTemplateResource('footer.tpl')
@@ -133,32 +148,36 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 	 * @param $galley ArticleGalley
 	 * @return string
 	 */
-	function _getHTMLContents($request, $galley) {
-		$journal = $request->getJournal();
+	protected function _getHTMLContents($request, $galley) {
 		$submissionFile = $galley->getFile();
-		$contents = file_get_contents($submissionFile->getFilePath());
-
+		$submissionId = $submissionFile->getData('submissionId');
+		$contents = Services::get('file')->fs->read($submissionFile->getData('path'));
+		
 		// Replace media file references
-		$submissionFileDao = DAORegistry::getDAO('SubmissionFileDAO');
 		import('lib.pkp.classes.submission.SubmissionFile'); // Constants
-		$embeddableFiles = array_merge(
-			$submissionFileDao->getLatestRevisions($submissionFile->getSubmissionId(), SUBMISSION_FILE_PROOF),
-			$submissionFileDao->getLatestRevisionsByAssocId(ASSOC_TYPE_SUBMISSION_FILE, $submissionFile->getFileId(), $submissionFile->getSubmissionId(), SUBMISSION_FILE_DEPENDENT)
-		);
+		$embeddableFilesIterator = Services::get('submissionFile')->getMany([
+                        'assocTypes' => [ASSOC_TYPE_SUBMISSION_FILE],
+                        'assocIds' => [$submissionFile->getId()],
+                        'fileStages' => [SUBMISSION_FILE_DEPENDENT],
+                        'includeDependentFiles' => true,
+                ]);
+                $embeddableFiles = iterator_to_array($embeddableFilesIterator);
+		
 		$referredArticle = null;
-		$articleDao = DAORegistry::getDAO('ArticleDAO');
+		$submissionDao = DAORegistry::getDAO('SubmissionDAO');
 
 		foreach ($embeddableFiles as $embeddableFile) {
 			$params = array();
 
-			if ($embeddableFile->getFileType()=='text/plain' || $embeddableFile->getFileType()=='text/css') $params['inline']='true';
+			if ($embeddableFile->getData('mimetype')=='text/plain' || $embeddableFile->getData('mimetype')=='text/css') $params['inline']='true';
 
 			// Ensure that the $referredArticle object refers to the article we want
-			if (!$referredArticle || $referredArticle->getId() != $galley->getSubmissionId()) {
-				$referredArticle = $articleDao->getById($galley->getSubmissionId());
+			if (!$referredArticle || $referredArticle->getId() != $submissionId) {
+				$referredArticle = $submissionDao->getById($submissionId);
 			}
-			$fileUrl = $request->url(null, 'article', 'download', array($referredArticle->getBestArticleId(), $galley->getBestGalleyId(), $embeddableFile->getFileId()), $params);
-			$pattern = preg_quote($embeddableFile->getOriginalFileName());
+
+			$fileUrl = $request->url(null, 'article', 'download', array($referredArticle->getBestArticleId(), $galley->getBestGalleyId(), $embeddableFile->getId()), $params);
+			$pattern = preg_quote(rawurlencode($embeddableFile->getLocalizedData('name')));
 
 			$contents = preg_replace(
 				'/([Ss][Rr][Cc]|[Hh][Rr][Ee][Ff]|[Dd][Aa][Tt][Aa])\s*=\s*"([^"]*' . $pattern . ')"/',
@@ -191,7 +210,7 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 
 		// Perform variable replacement for journal, issue, site info
 		$issueDao = DAORegistry::getDAO('IssueDAO');
-		$issue = $issueDao->getByArticleId($galley->getSubmissionId());
+		$issue = $issueDao->getBySubmissionId($submissionId);
 
 		$journal = $request->getJournal();
 		$site = $request->getSite();
@@ -200,7 +219,7 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin {
 			'issueTitle' => $issue?$issue->getIssueIdentification():__('editor.article.scheduleForPublication.toBeAssigned'),
 			'journalTitle' => $journal->getLocalizedName(),
 			'siteTitle' => $site->getLocalizedTitle(),
-			'currentUrl' => $request->getRequestUrl()
+			'currentUrl' => $request->getRequestUrl(),
 		);
 
 		foreach ($paramArray as $key => $value) {

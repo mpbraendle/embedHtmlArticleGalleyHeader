@@ -10,8 +10,14 @@
 {include file=$headerTemplatePath}
 {include file=$breadcrumbsTemplatePath}
 		<div id="htmlContainer">
+			{if !$isLatestPublication}
+				<div class="galley_view_notice">
+					<div class="galley_view_notice_message" role="alert">
+						{translate key="submission.outdatedVersion" datePublished=$galleyPublication->getData('datePublished')|date_format:$dateFormatLong urlRecentVersion=$articleUrl}
+					</div>
+				 </div>
+			{/if}
 			{$html}
-
 			{* UZH CHANGE OJS-62 sui-generis script for numbering of paragraphs *}
 			<script>
 				$('.content p').each(function(){
@@ -23,6 +29,12 @@
 				});
 			</script>
 			{* END CHANGE OJS-62 *}
+
+			{* UZH CHANGE OJS-79 (GISo) script for responsive tables *}
+			<script>
+				$('table').wrap('<div style="overflow-x:auto;"></div>');
+			</script>
+			{* END UZH CHANGE OJS-79 *}
 
 			{* UZH CHANGE OJS-67 2019/03/08/mb display Licensing info *}
 			{* Licensing info *}
