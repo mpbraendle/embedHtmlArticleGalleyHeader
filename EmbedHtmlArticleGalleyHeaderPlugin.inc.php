@@ -157,6 +157,10 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin
                     'articleHTML',
                     $request->getBaseUrl() . '/' . $this->getPluginPath() . '/js/articleHTML.js'
                 );
+                $templateMgr->addStyleSheet(
+                    'style',
+                    $request->getBaseUrl() . '/' . $this->getPluginPath() . '/css/style.css'
+                );
 
                 $templateMgr->display($this->getTemplateResource('display.tpl'));
                 return true;

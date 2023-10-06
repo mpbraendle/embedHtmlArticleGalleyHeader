@@ -9,6 +9,7 @@
  */
 
 const heads = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+const imgs = document.querySelectorAll("img");
 let paddings = new Map();
 let value = 0;
 for (i = 1; i <= 6; i++){
@@ -40,4 +41,7 @@ heads.forEach((h, index) => {
             ul.append(li);
         }
     }
+});
+imgs.forEach((img) => {
+    img.tabIndex = "0";
 });

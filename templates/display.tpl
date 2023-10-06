@@ -9,7 +9,7 @@
  *}
 {include file=$headerTemplatePath}
 {include file=$breadcrumbsTemplatePath}
-<div style="padding: 10px; height: 69vh; overflow: auto; width: 100%;">
+<div style="padding: 10px; height: 65vh; overflow: auto; width: 100%;">
 		<div id="htmlContainer">
 			{if !$isLatestPublication}
 				<div class="galley_view_notice">
