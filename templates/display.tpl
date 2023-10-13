@@ -9,6 +9,7 @@
  *}
 {include file=$headerTemplatePath}
 {include file=$breadcrumbsTemplatePath}
+<div style="padding: 10px; height: 65vh; overflow: auto; width: 100%;">
 		<div id="htmlContainer">
 			{if !$isLatestPublication}
 				<div class="galley_view_notice">
@@ -61,7 +62,8 @@
         		{* END UZH CHANGE OJS-67 *}
 		</div>
 	</div>
-
+</div>
+	{include file=$blockTemplatePath}
 	{call_hook name="Templates::Common::Footer::PageFooter"}
 	{include file=$footerTemplatePath}
 </body>

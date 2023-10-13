@@ -149,8 +149,19 @@ class EmbedHtmlArticleGalleyHeaderPlugin extends GenericPlugin
                   'isFullWidth' => true,
                   'headerTemplatePath' => $this->getTemplateResource('header.tpl'),
                   'breadcrumbsTemplatePath' => $this->getTemplateResource('breadcrumbs_galley.tpl'),
-                  'footerTemplatePath' => $this->getTemplateResource('footer.tpl')
+                  'footerTemplatePath' => $this->getTemplateResource('footer.tpl'),
+                  'blockTemplatePath' => $this->getTemplateResource('block.tpl')
                 ));
+
+                $templateMgr->addJavaScript(
+                    'articleHTML',
+                    $request->getBaseUrl() . '/' . $this->getPluginPath() . '/js/articleHTML.js'
+                );
+                $templateMgr->addStyleSheet(
+                    'style',
+                    $request->getBaseUrl() . '/' . $this->getPluginPath() . '/css/style.css'
+                );
+
                 $templateMgr->display($this->getTemplateResource('display.tpl'));
                 return true;
             }
