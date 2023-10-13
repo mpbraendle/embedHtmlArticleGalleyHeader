@@ -9,7 +9,7 @@
  */
 
 const heads = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
-const imgs = document.querySelectorAll("img");
+const imgs = document.getElementById("htmlContainer").querySelectorAll("img");
 let paddings = new Map();
 let value = 0;
 for (i = 1; i <= 6; i++){
@@ -44,4 +44,10 @@ heads.forEach((h, index) => {
 });
 imgs.forEach((img) => {
     img.tabIndex = "0";
+    let a  = document.createElement("a");
+    const icon = document.createElement("img");
+    icon.src = "https://" + window.location.hostname + "/plugins/generic/embedHtmlArticleGalleyHeader/images/download-icon-30.png"
+    a.append(icon);
+    a.href = img.getAttribute("src");
+    img.parentElement.append(a);
 });
