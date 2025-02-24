@@ -8,20 +8,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2020-09-17T16:39:32+02:00\n"
-"PO-Revision-Date: 2022-10-11T16:39:32+02:00\n"
+"PO-Revision-Date: 2020-09-17T16:39:32+02:00\n"
 "Language: \n"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.displayName"
-msgstr "Galeria alternativa de artigos HTML com cabeçalho/rodapé"
+msgstr "Visualizzatore alternativo per HTML articoli con intestazione/piede"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.description"
-msgstr "Este plugin fornece suporte de renderização para galeras de artigos HTML e suporta iPads."
+msgstr "Questo plugin fornisce il supporto di rendering per i galeys articolo HTML e supporta gli iPad."
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.galley_type.file"
-msgstr "Texto completo em HTML"
+msgstr "Testo completo HTML"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.galley_type.pdf"
-msgstr "Texto completo em PDF"
-
-msgid "plugins.generic.embedHtmlArticleGalleyHeader.preview"
-msgstr "Antevisão"
+msgstr "Testo completo PDF"

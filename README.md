@@ -6,7 +6,8 @@ This OJS plugin provides rendering support for HTML Article Galleys and supports
 
 The plugin also displays the journal's header and footer for consistent branding across a journal's website. Also, it uses the standard OJS breadcrumb instead of the one used in the HtmlArticleGalley plugin.
 
-Compatible with OJS 3.3.0-x
+Compatible with OJS 3.3.0-x (stable 3.3.0 branch)
+Compatible with OJS 3.4.0-x (master branch)
 
 Based on work https://github.com/ajnyga/embedHtmlArticleGalley by @ajnyga and the The Federation of Finnish Learned Societies (https://tsv.fi/en/).
 

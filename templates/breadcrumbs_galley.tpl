@@ -36,9 +36,13 @@
 			<span class="separator">{translate key="navigation.breadcrumbSeparator"}</span>
 		</li>
 		<li>
-			<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">
-				{$issue->getIssueIdentification()}
-			</a>
+			{if isset($issue)}
+				<a href="{url page="issue" op="view" path=$issue->getBestIssueId()}">
+					{$issue->getIssueIdentification()}
+				</a>
+			{else}
+				{translate key="plugins.generic.embedHtmlArticleGalleyHeader.preview"}
+			{/if}
 			<span class="separator">{translate key="navigation.breadcrumbSeparator"}</span>
 		</li>
 		<li>

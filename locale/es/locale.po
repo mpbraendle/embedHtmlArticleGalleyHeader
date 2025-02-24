@@ -12,16 +12,16 @@ msgstr ""
 "Language: \n"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.displayName"
-msgstr "Galeria alternativa de artigos HTML com cabeçalho/rodapé"
+msgstr "Galera de artículos HTML alternativa con cabecera/pie de página"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.description"
-msgstr "Este plugin fornece suporte de renderização para galeras de artigos HTML e suporta iPads."
+msgstr "Este plugin proporciona soporte de renderizado para las galeras de artículos HTML y es compatible con los iPads."
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.galley_type.file"
-msgstr "Texto completo em HTML"
+msgstr "Texto completo en HTML"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.galley_type.pdf"
-msgstr "Texto completo em PDF"
+msgstr "Texto completo en PDF"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.preview"
-msgstr "Antevisão"
+msgstr "Vista previa"

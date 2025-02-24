@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2020-09-17T16:39:32+02:00\n"
-"PO-Revision-Date: 2020-09-17T16:39:32+02:00\n"
+"PO-Revision-Date: 2022-10-11T16:39:32+02:00\n"
 "Language: \n"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.displayName"
@@ -22,3 +22,6 @@ msgstr "Texte intégral HTML"
 
 msgid "plugins.generic.embedHtmlArticleGalleyHeader.galley_type.pdf"
 msgstr "Texte intégral PDF"
+
+msgid "plugins.generic.embedHtmlArticleGalleyHeader.preview"
+msgstr "Aperçu"
